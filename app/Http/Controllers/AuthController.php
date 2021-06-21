@@ -12,7 +12,7 @@ class AuthController extends Controller
 {
     public function __construct()   // 呼叫controller時可以先載入middleware
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth.jwt', ['except' => ['login', 'register']]);
     }
 
     public function login(Request $request)
@@ -33,9 +33,16 @@ class AuthController extends Controller
         return response()->json(['status' => 0, 'token' => $token]);
     }
 
-    public function register()
+    public function register(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string|min:6',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json([$validator->errors()], 422);
+        }
     }
 
     public function user()
