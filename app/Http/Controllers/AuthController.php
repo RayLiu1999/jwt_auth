@@ -12,7 +12,7 @@ class AuthController extends Controller
 {
     public function __construct()   // 呼叫controller時可以先載入middleware
     {
-        $this->middleware('auth:api', ['except' => 'login', 'register']);
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
     public function login(Request $request)
@@ -23,7 +23,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json([$validator->errors()], 422);
         }
 
         if (!$token = auth()->attempt($validator->validated())) {

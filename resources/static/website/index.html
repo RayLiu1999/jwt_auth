@@ -7,9 +7,35 @@
     <title>Document</title>
 </head>
 <body>
-    <div>測試用</div>
     <script>
-        fetch('http://127.0.0.1:8000/auth/login')
+        fetch('http://127.0.0.1:8000/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'email': '123qwe@gmail.com',
+                'password': '123qwe'
+            })
+        })
+        .then((res) => {
+            return res.json();
+        })
+        .then((json) => {
+            console.log(json.token);
+        }).catch((err) => {
+            console.log('錯誤', err);
+        });
+        
+        fetch('http://127.0.0.1:8000/api/auth/user', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' ,
+                'Accept': 'application/json',
+            },
+        
+        })
         .then((res) => {
             return res.json();
         })
